@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.github
+.husky
+coverage
+prisma/migrations
+
+*.md
+*.log
+.env*

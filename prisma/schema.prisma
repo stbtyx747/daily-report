@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------
+// Enums
+// -----------------------------------------------
+
+enum Role {
+  sales
+  manager
+}
+
+enum ReportStatus {
+  draft
+  submitted
+  reviewed
+}
+
+// -----------------------------------------------
+// Models
+// -----------------------------------------------
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  role       Role
+  department String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  dailyReports DailyReport[]
+  comments     Comment[]
+
+  @@map("users")
+}
+
+model Customer {
+  id          Int      @id @default(autoincrement())
+  name        String
+  companyName String
+  department  String?
+  industry    String?
+  contactName String?
+  dealSize    String?
+  phone       String?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  visitRecords VisitRecord[]
+
+  @@map("customers")
+}
+
+model DailyReport {
+  id         Int          @id @default(autoincrement())
+  userId     Int
+  reportDate DateTime     @db.Date
+  problem    String?      @db.Text
+  plan       String?      @db.Text
+  status     ReportStatus @default(draft)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  visitRecords VisitRecord[]
+  comments     Comment[]
+
+  @@unique([userId, reportDate])
+  @@index([userId])
+  @@index([reportDate])
+  @@index([status])
+  @@map("daily_reports")
+}
+
+model VisitRecord {
+  id            Int       @id @default(autoincrement())
+  dailyReportId Int
+  customerId    Int
+  visitTime     DateTime? @db.Time
+  content       String    @db.Text
+  sortOrder     Int
+  createdAt     DateTime  @default(now())
+
+  dailyReport DailyReport @relation(fields: [dailyReportId], references: [id], onDelete: Cascade)
+  customer    Customer    @relation(fields: [customerId], references: [id])
+
+  @@index([dailyReportId])
+  @@map("visit_records")
+}
+
+model Comment {
+  id            Int      @id @default(autoincrement())
+  dailyReportId Int
+  commenterId   Int
+  content       String   @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  dailyReport DailyReport @relation(fields: [dailyReportId], references: [id], onDelete: Cascade)
+  commenter   User        @relation(fields: [commenterId], references: [id])
+
+  @@index([dailyReportId])
+  @@map("comments")
+}
