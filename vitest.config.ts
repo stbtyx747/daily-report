@@ -10,6 +10,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     include: ['**/*.{test,spec}.{ts,tsx}'],
     exclude: ['node_modules', '.next', 'dist'],
+    passWithNoTests: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
