@@ -36,5 +36,11 @@ Thumbs.db
 *.swp
 *.swo
 
+# TypeScript
+tsconfig.tsbuildinfo
+
+# Serena (MCP)
+.serena/
+
 # Google Cloud
 .gcloudignore
