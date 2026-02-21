@@ -32,6 +32,14 @@ const eslintConfig = [
       'prefer-const': 'error',
     },
   },
+  // shadcn/ui の生成コンポーネントは tailwindcss プラグインの警告を除外
+  {
+    files: ['components/ui/**/*.tsx', 'hooks/use-toast.ts'],
+    rules: {
+      'tailwindcss/enforces-shorthand': 'off',
+      'tailwindcss/no-custom-classname': 'off',
+    },
+  },
   // prettier は末尾に置き、ESLint のフォーマットルールを無効化する
   prettier,
 ]
