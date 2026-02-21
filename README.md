@@ -55,6 +55,8 @@ npm run dev
 | 変数名 | 説明 | 例 |
 |---|---|---|
 | `DATABASE_URL` | PostgreSQL 接続 URL | `postgresql://user:pass@localhost:5432/daily_report` |
+| `NEXTAUTH_SECRET` | NextAuth.js の署名・暗号化キー | `openssl rand -base64 32` で生成 |
+| `NEXTAUTH_URL` | アプリのベース URL | `http://localhost:3000` |
 
 ---
 
