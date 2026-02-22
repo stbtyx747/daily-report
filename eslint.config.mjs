@@ -13,7 +13,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
-    ignores: ['.next/', 'node_modules/', 'dist/', 'coverage/'],
+    ignores: ['.next/', 'node_modules/', 'dist/', 'coverage/', '.claude/'],
   },
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   ...tailwindcss.configs['flat/recommended'],
