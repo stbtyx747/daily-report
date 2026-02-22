@@ -21,6 +21,12 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/login', nextUrl))
   }
 
+  // Role-based access control
+  // /master/users is manager-only; redirect sales to /reports
+  if (nextUrl.pathname.startsWith('/master/users') && session.user.role === 'sales') {
+    return NextResponse.redirect(new URL('/reports', nextUrl))
+  }
+
   return NextResponse.next()
 })
 
