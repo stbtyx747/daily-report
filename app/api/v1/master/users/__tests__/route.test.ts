@@ -92,7 +92,7 @@ describe('GET /api/v1/master/users', () => {
 
   describe('未認証', () => {
     it('401 UNAUTHORIZED を返す', async () => {
-      vi.mocked(auth).mockResolvedValue(null)
+      vi.mocked(auth).mockResolvedValue(null as never)
 
       const res = await GET(makeRequest())
       const body = await res.json()
