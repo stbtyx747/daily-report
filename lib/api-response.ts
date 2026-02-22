@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import type { z } from 'zod'
 
 // ===== 型定義 =====
 
@@ -66,3 +67,30 @@ export const invalidStatusTransition = (from: string, to: string) =>
 
 export const validationError = (details: { field: string; message: string }[]) =>
   apiError('VALIDATION_ERROR', 'バリデーションエラー', 400, details)
+
+// ===== Zod パーサー =====
+
+/**
+ * リクエストボディを Zod スキーマで検証する。
+ * 失敗時は VALIDATION_ERROR レスポンスを返す。
+ */
+export function parseBody<T>(
+  schema: z.ZodSchema<T>,
+  body: unknown
+): { success: true; data: T } | { success: false; response: Response } {
+  const result = schema.safeParse(body)
+  if (!result.success) {
+    const details = result.error.issues.map((issue) => ({
+      field: issue.path.join('.'),
+      message: issue.message,
+    }))
+    return { success: false, response: validationError(details) }
+  }
+  return { success: true, data: result.data }
+}
+
+// ===== 短縮エイリアス（Route Handler 推奨） =====
+
+export const successResponse = apiSuccess
+export const listResponse = apiSuccessList
+export const errorResponse = apiError
