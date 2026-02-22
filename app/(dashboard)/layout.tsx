@@ -1,19 +1,23 @@
+import { redirect } from 'next/navigation'
+import { auth } from '@/auth'
 import { Header } from '@/components/layout/header'
 import { Sidebar } from '@/components/layout/sidebar'
 import type { SessionUser } from '@/types/auth'
-
-// TODO: Issue #7 で NextAuth の auth() に置き換える
-async function getSessionUser(): Promise<SessionUser> {
-  return {
-    id: 1,
-    name: '田中 太郎',
-    email: 'tanaka@example.com',
-    role: 'sales',
-  }
-}
+import type { UserRole } from '@/types/auth'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = await getSessionUser()
+  const session = await auth()
+
+  if (!session?.user) {
+    redirect('/login')
+  }
+
+  const user: SessionUser = {
+    id: Number(session.user.id),
+    name: session.user.name ?? '',
+    email: session.user.email ?? '',
+    role: session.user.role as UserRole,
+  }
 
   return (
     <div className="flex h-screen flex-col">

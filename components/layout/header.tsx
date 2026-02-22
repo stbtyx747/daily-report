@@ -1,7 +1,7 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { SessionUser } from '@/types/auth'
@@ -16,11 +16,8 @@ type HeaderProps = {
 }
 
 export function Header({ user }: HeaderProps) {
-  const router = useRouter()
-
-  const handleLogout = async () => {
-    // Issue #7 で NextAuth の signOut() に置き換える
-    router.push('/login')
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/login' })
   }
 
   return (
