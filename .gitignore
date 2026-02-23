@@ -42,5 +42,8 @@ tsconfig.tsbuildinfo
 # Serena (MCP)
 .serena/
 
+# Claude Code worktrees (temporary)
+.claude/worktrees/
+
 # Google Cloud
 .gcloudignore
